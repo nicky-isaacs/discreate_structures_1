@@ -2,7 +2,7 @@
 
 This is my solution to the prime breaking problem. My approah was as follows:
 
-  1. Thread out the generation of prime numbers from 2 to N-1, where N is the largest number we need to factor
+  1. Thread out the generation of prime numbers from 2 to N-1, where N is the largest number we need to factor. Employs the Sieve of Eratosthenes.
   2. For each number we need to factor, iterate over the list of primes
 
 ##Requirements
