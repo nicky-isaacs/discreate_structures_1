@@ -222,6 +222,11 @@ module BasicAssignment
         end
 
         t2 = Thread.new do
+          q = @@seen_before.reverse.detect{ |i| number%i == 0 }
+          mutex.synchronize{ result = [q, number/q] }
+        end
+
+        t3 = Thread.new do
           r = number.prime_factors
           mutex.synchronize do
             result = r
@@ -232,10 +237,21 @@ module BasicAssignment
 
         # Wait for one or the other to finish
         begin
-          # puts "#{t1.status} #{t2.status}"
-          t2.kill unless t1
-          t1.kill unless t2
-        end while (t1.status || t2.status)
+          unless t1.status
+            t2.kill
+            t3.kill
+          end
+
+          unless t2.status
+            t1.kill
+            t3.kill
+          end
+
+          unless t3.status
+            t1.kill
+            t2.kill
+          end
+        end while (t1.status or t2.status or t3.status)
 
         unless result
           result = number.prime_factors
