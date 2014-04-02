@@ -214,9 +214,10 @@ module BasicAssignment
     mutex = Mutex.new
 
     file_buffer.each_line.map{ |l| l.to_i }.each_with_index do |number, index|
-      result = factor number
+      t = Time.measure{ result = factor number }
       #puts "Factors of #{number} => #{result.inspect}\nTook #{t} seconds"
       puts "Took #{t} seconds for #{number.to_s.size} digit number"
+      break if t > (300)
     end
   end
 
